@@ -1,0 +1,14 @@
+#!/bin/bash
+set -euo pipefail
+
+[ ! -f docker-compose.yml ]  && curl -O https://git.cs.kau.se/csma/cyber-range/crl/-/raw/main/docker-compose.yml
+
+mkdir -p stored-events blueprints challenges Events
+# If acl is installed and the acl is already not set; set inheritance ACL to rwX for current user
+if which setfacl >/dev/null && which getfacl >/dev/null && [ -O Events ] && [ -z "$(getfacl -sacR Events)" ]
+then
+	setfacl -Rm d:u:$(id -u):rwX,u:$(id -u):rwX Events || echo "Could not set acl"
+fi
+
+# docker pull compose pull
+docker compose run --remove-orphans --rm --entrypoint python3 crl -m crl "$@"

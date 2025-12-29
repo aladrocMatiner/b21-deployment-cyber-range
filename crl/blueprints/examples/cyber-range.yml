@@ -1,0 +1,51 @@
+# Copyright (c) CSMA (https://git.cs.kau.se/csma)
+
+# Here you define the networks 
+# A instace on a network cannot directly reach instances in other networks 
+# All instances can reach internet (via the host)
+# Be aware : it is very important to set ports: [] on all services 
+# otherwise the included challenges will publish ports
+networks:
+  - public
+  - internal
+ 
+services:
+  # Wireguard is a reserved name for the vpn service and this service have : 
+  # - no include (will be based on "compiled" version of crl/services/wireguard.yml)
+  # - Only allowed override/config are networks
+  wireguard:
+    networks:
+      - public
+
+  # Here comes the challenges
+  # When including challenges it is not possible to override hostname!  
+  # The service name need to be unique but several services can be based on the same challenge
+  single-challenge:
+    include: ./challenges/examples/base/docker-compose.yml
+    networks:
+      - public
+    ports: []
+
+  # A Multi-challenge that consist of two challenges (see included file for info)
+  # Set on a internal network (=need to go through internal-router to reach the container)
+  multi-challenge:
+    include: ./challenges/examples/combined/docker-compose.yml
+    networks:
+      - internal
+    ports: []
+
+  # A challenge that consists of multiple services (frontend, backend)
+  # The frontend service(s) will be available in the network specified (or default) 
+  # backend services will placed on a service internal network only reachable from the frontend.
+  single-challenge-multi-service:
+    include: ./challenges/examples/multi-service/docker-compose.yml
+    networks:
+      - public
+    ports: []
+
+  # The included challenge does not specify any containers(services) therefore 
+  # this will only create a ctfd challenge but no docker service/container
+  # therefore we can also omit to set ports: [] but this is a exception 
+  # This is however not recommended for cyber-range as all will get the same flag
+  attach-only:
+    include: ./challenges/examples/attachment/docker-compose.yml

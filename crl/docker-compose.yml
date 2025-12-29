@@ -1,0 +1,40 @@
+networks:
+  crl-public:
+    driver: overlay
+    attachable: true
+    name: crl-public
+
+# traefik-le is not used here but needed for traefik to store 
+# lets encrypt certififcates
+# TODO: check if traefik-le can be created on-demand when/if needed
+# ie moved from here to the traefik service
+volumes:
+  portd-run:
+    name: portd-run
+  traefik-le:
+    name: traefik-le
+ 
+services:
+  crl:
+    image: ${CRL_IMAGE:-docker.cs.kau.se/csma/cyber-range/crl}
+    build:
+      context: .
+    working_dir: $PWD
+    environment:
+      DOCKER_AUTH_FILE: "$HOME/.docker/config.json"
+      CRL_IMAGE: ${CRL_IMAGE:-docker.cs.kau.se/csma/cyber-range/crl}
+      WG_IMAGE : ${WG_IMAGE:-docker.cs.kau.se/csma/cyber-range/crl/wireguard}
+      CTFD_IMAGE : ${CTFD_IMAGE:-docker.cs.kau.se/csma/cyber-range/ctfd-plugins/ctfd:all}
+      TRAEFIK_IMAGE : ${TRAEFIK_IMAGE:-traefik:v3.2}
+    networks:
+      - crl-public
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "$PWD:$PWD"
+      - "$HOME/.docker/config.json:/root/.docker/config.json:ro"
+      - "portd-run:/var/run/portd/"
+  wireguard:
+    image: ${WG_IMAGE:-docker.cs.kau.se/csma/cyber-range/crl/wireguard}
+    build:
+      context: wireguard
+    entrypoint: ["exit"]

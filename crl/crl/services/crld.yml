@@ -1,0 +1,34 @@
+networks:
+ crl-public:
+   name: crl-public
+   external: true
+
+volumes:
+  portd-run:
+    name: portd-run
+    external: true
+    
+services:
+  crld:
+    image: ${CRL_IMAGE:-docker.cs.kau.se/csma/cyber-range/crl}
+    build:
+      context: ..
+    working_dir: "$PWD/../.."
+    entrypoint: ["crld"]
+    ports:
+      - "5000:5000"
+    environment:
+      CRLD_LOG_LEVEL: INFO
+      CRL_IMAGE: ${CRL_IMAGE:-docker.cs.kau.se/csma/cyber-range/crl}
+      WG_IMAGE : ${WG_IMAGE:-docker.cs.kau.se/csma/cyber-range/crl/wireguard}
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "$PWD/../..:$PWD/../.."
+      - "portd-run:/var/run/portd/"
+      - "$HOME/.docker/config.json:/root/.docker/config.json:ro"
+    networks:
+      - crl-public
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager

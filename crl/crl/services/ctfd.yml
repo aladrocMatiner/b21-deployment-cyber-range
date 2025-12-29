@@ -1,0 +1,34 @@
+networks:
+  crl-public:
+    name: crl-public
+    external: true
+      
+services:
+  ctfd:
+    user: root
+    image: ${CTFD_IMAGE:-docker.cs.kau.se/csma/cyber-range/ctfd-plugins/ctfd:all}                
+    ports:
+      - "8000:8000"
+    environment:
+      UPDATE_CHECK: 'false'  # Disable banner if our ctfd gets outdated
+      WORKERS: 1
+      INIT_EVENT_NAME: EVENT_NAME # Will be set when provisioned
+      REVERSE_PROXY: false   # Will be set to true if traefik is used
+      CRL_ENABLE: false      # will be set to true if crld is used
+    networks:
+      crl-public:
+        aliases:
+          - EVENT_NAME-ctfd  # Will be replaced by eventname-ctfd
+    deploy:
+      labels:
+        traefik.enable: 'true'     # will be set to false if traefik is not used
+        traefik.constraint-label: 'crl-traefik'
+        # Will be set when provisioned
+        #traefik.http.routers.EVENT_NAME-ctfd.rule: 'Host(`EVENT_NAME.external-url`)'   
+        #traefik.http.services.EVENT_NAME-ctfd.loadbalancer.server.port: '8000'
+        #traefik.http.routers.EVENT_NAME-ctfd.entrypoints: 'web'     # Should this be here if tls is set ?                                
+        #traefik.http.routers.EVENT_NAME-ctfd.tls: "true"
+        #traefik.http.routers.EVENT_NAME-ctfd.tls.certresolver: "crl-resolver"
+      placement:
+        constraints:
+          - node.role == manager

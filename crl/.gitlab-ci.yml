@@ -1,0 +1,71 @@
+# This file is a template, and might need editing before it works on your project.
+# Official language image. Look for the different tagged releases at:
+# https://hub.docker.com/r/library/python/tags/
+stages:
+  - lint
+ # - test
+  - publish
+
+image: python:3.11-alpine
+default:
+  tags:
+    - docker
+
+lint:
+  stage: lint
+  before_script:
+    - python -V  # Print out python version for debugging
+  script:
+    - pip install .
+    - pip install black
+    - pip install isort[colors]
+    - pip install flake8
+    - pip install flake8-annotations
+    - pip install mypy
+    - pip install types-requests
+    - pip install types-PyYAML
+    - pip install types-tqdm
+    - pip install types-Pygments
+    - isort . --check --diff --color
+    - black . --check --diff --color
+    - flake8 --max-line-length=120 setup.py crl/
+    - flake8 --max-line-length=120 setup.py crld/
+    - flake8 --max-line-length=120 setup.py portd/
+    - mypy -p crl --strict
+    - mypy -p crld --strict
+
+#test:
+#  stage: test 
+#  before_script:
+#    - python -V  # Print out python version for debugging
+#    - pip install virtualenv
+#    - virtualenv venv
+#    - source venv/bin/activate
+#  script:
+#    - pip install .
+
+publish-crl:
+  stage: publish
+  image:
+    name: gcr.io/kaniko-project/executor:v1.23.0-debug
+    entrypoint: [""]
+  only:
+    - main
+  script:
+    - /kaniko/executor
+      --context "${CI_PROJECT_DIR}"
+      --dockerfile "${CI_PROJECT_DIR}/Dockerfile"
+      --destination "${CI_REGISTRY_IMAGE}"
+
+publish-wg:
+  stage: publish
+  image:
+    name: gcr.io/kaniko-project/executor:v1.23.0-debug
+    entrypoint: [""]
+  only:
+    - main
+  script:
+    - /kaniko/executor
+      --context "${CI_PROJECT_DIR}/wireguard/"
+      --dockerfile "${CI_PROJECT_DIR}/wireguard/Dockerfile"
+      --destination "${CI_REGISTRY_IMAGE}/wireguard"

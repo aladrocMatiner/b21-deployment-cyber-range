@@ -1,0 +1,16 @@
+volumes:
+  portd-run:
+    name: portd-run
+    external: true
+
+services:
+  portd:
+    image: ${CRL_IMAGE:-docker.cs.kau.se/csma/cyber-range/crl}
+    network_mode: host
+    entrypoint: ["portd"]
+    volumes:
+      - "portd-run:/var/run/portd/"
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager

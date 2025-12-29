@@ -1,0 +1,23 @@
+#ctf-url: 'http://localhoszxszxdt:8000'
+#ctf-token: 'secretvaluehere'
+external-url: "127.0.0.1"  # the external base ip or fqdn of the host machine eg. crl.kauotic.se
+blueprint: "blueprints/examples/cyber-range.yml"
+#disable-traefik: true   # Uncomment to disable traefik for this event even if enabled globally 
+#disable-crld: true      # Uncomment to disable crld for this event even if enabled globally 
+
+# Valid placeholders used for flags: %user% %event% %flag% %hash% %hash8% %hash16% %hash32%
+flag-format: 'flag{%user%-%hash%}'
+
+ctfd:                 # If exists will enabled provisiong of ctfd the the config provided below 
+  INIT_EVENT_MODE: 'users'
+  #INIT_EVENT_REG_CODE:   
+  INIT_ADMIN_PASS: 'password123'
+  AUTH_TYPE: 'public'
+  REGISTRATION_USERNAME_ALLOWED_REGEX: '^[A-Za-z0-9]+$$'
+  REGISTRATION_USERNAME_MIN_LENGTH: '1'
+  REGISTRATION_USERNAME_MAX_LENGTH: '32'
+  REGISTRATION_USERNAME_CASE_SENSITIVE: 'true'
+  #AUTH_REG_CODE: regcodehere # registration code if public auth   
+  CRL_ENABLE: 'true'
+  HINTS_DISABLE_SORT: 'true'
+  HINTS_DISABLE_CHECK: 'true'

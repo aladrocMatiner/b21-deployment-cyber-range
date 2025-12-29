@@ -1,0 +1,37 @@
+networks:
+  crl-public:
+    name: crl-public
+    external: true
+
+volumes:
+  traefik-le:
+    name: traefik-le
+    external: true
+
+services:
+  traefik:
+    image: ${TRAEFIK_IMAGE:-traefik:v3.2}
+    command:
+      - "--log.level=DEBUG"
+      - "--providers.swarm.endpoint=unix:///var/run/docker.sock"
+      - "--providers.swarm.network=crl-public"
+      - "--providers.swarm.exposedbydefault=false"
+      - "--providers.swarm.constraints=Label(`traefik.constraint-label`, `crl-traefik`)"
+      - "--entryPoints.web.address=:80"
+      - "--entryPoints.websecure.address=:443"
+      - "--certificatesresolvers.crl-resolver.acme.email=crl@bogus-domain.io"   # TODO: make this configurable ??
+      #- "--certificatesresolvers.myresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
+      - "--certificatesresolvers.crl-resolver.acme.storage=acme.json"
+      - "--certificatesresolvers.crl-resolver.acme.httpchallenge.entrypoint=web"
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "traefik-le:/letsencrypt"
+    networks:
+      - crl-public
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager

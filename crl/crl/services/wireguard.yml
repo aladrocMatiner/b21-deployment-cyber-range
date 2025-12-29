@@ -1,0 +1,25 @@
+services:
+  wireguard:
+    image: ${WG_IMAGE:-docker.cs.kau.se/csma/cyber-range/crl/wireguard}
+    hostname: wireguard
+    cap_add:
+      - NET_ADMIN
+    environment:
+      PUID: "0"
+      PGID: "0"
+      TZ: Europe/Stockholm
+      SERVERURL: EXTERNAL_URL
+      SERVERPORT: "1337"
+      PEERS: USERNAME
+      PERSISTENTKEEPALIVE_PEERS: all
+      DISABLE_PEERDNS: "true"
+#      ALLOWEDIPS: "10.0.0.0/8, 10.13.13.0/30"
+      ALLOWEDIPS: "10.0.0.0/8"
+      PROXYPORTS: "80 10000 10001 10002 10003 10004 10005 10006 10007 10008 10009"
+      PROXYHOST: "10.13.13.2"
+    ports:
+      - 1337:51820/udp
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager

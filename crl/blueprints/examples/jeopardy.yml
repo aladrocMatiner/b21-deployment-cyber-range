@@ -1,0 +1,28 @@
+# Copyright (c) CSMA.
+
+# Jeopardy style blueprint
+# All users will have the same flag 
+# The crld plugin should not be enabled (as all users are uisng the same world) 
+
+services:
+  # Here comes the challenges
+  # When including challenges it is not possible to override hostname!  
+  # The service name need to be unique but several services can be based on the same challenge
+  # The exposed ports (in teh challanges) will be randomized.
+  single-challenge:
+    include: ./challenges/examples/base/docker-compose.yml
+ 
+  # A Multi-challenge that consist of two challenges (see included file for info)
+  multi-challenge:
+    include: ./challenges/examples/combined/docker-compose.yml
+  
+  # A challenge that consists of multiple services (frontend, backend)
+  # The frontend service(s) will be available to the players 
+  # backend services will placed on a service internal network only reachable from the frontend.
+  single-challenge-multi-service:
+    include: ./challenges/examples/multi-service/docker-compose.yml
+
+  # The included challenge does not specify any containers(services) therefore 
+  # this will only create a ctfd challenge but no docker service/container
+  attach-only:
+    include: ./challenges/examples/attachment/docker-compose.yml
