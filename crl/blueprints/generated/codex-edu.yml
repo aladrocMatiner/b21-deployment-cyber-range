@@ -12,6 +12,30 @@ services:
     networks:
       - public
 
+  edu-stego-01:
+    include: ./challenges-codex/edu-stego-01/docker-compose.yml
+
+  edu-mobile-01:
+    include: ./challenges-codex/edu-mobile-01/docker-compose.yml
+
+  edu-cloud-01:
+    include: ./challenges-codex/edu-cloud-01/docker-compose.yml
+
+  edu-iot-01:
+    include: ./challenges-codex/edu-iot-01/docker-compose.yml
+
+  edu-blockchain-01:
+    include: ./challenges-codex/edu-blockchain-01/docker-compose.yml
+
+  edu-network-01:
+    include: ./challenges-codex/edu-network-01/docker-compose.yml
+
+  edu-prog-01:
+    include: ./challenges-codex/edu-prog-01/docker-compose.yml
+
+  edu-dfir-01:
+    include: ./challenges-codex/edu-dfir-01/docker-compose.yml
+
   edu-crypto-01:
     include: ./challenges-codex/edu-crypto-01/docker-compose.yml
 
