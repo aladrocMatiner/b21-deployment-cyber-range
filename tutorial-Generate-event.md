@@ -15,7 +15,7 @@ This guide walks you through generating a new CRL event using the Codex challeng
 ## Step 1: Go to the CRL folder
 
 ```bash
-cd /home/aladroc/src-local/__aladrocMatiner/b21-deployment-cyber-range/crl
+cd /home/aladroc/src-local/__aladrocMatiner/bv21-deployment-cyber-range/crl
 ```
 
 ## Step 2: Create the event
