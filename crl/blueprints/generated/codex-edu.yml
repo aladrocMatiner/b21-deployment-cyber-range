@@ -1,0 +1,37 @@
+networks:
+  - public
+
+services:
+  edu-web-01:
+    include: ./challenges-codex/edu-web-01/docker-compose.yml
+    networks:
+      - public
+
+  edu-web-02:
+    include: ./challenges-codex/edu-web-02/docker-compose.yml
+    networks:
+      - public
+
+  edu-crypto-01:
+    include: ./challenges-codex/edu-crypto-01/docker-compose.yml
+
+  edu-crypto-02:
+    include: ./challenges-codex/edu-crypto-02/docker-compose.yml
+
+  edu-forensics-01:
+    include: ./challenges-codex/edu-forensics-01/docker-compose.yml
+
+  edu-forensics-02:
+    include: ./challenges-codex/edu-forensics-02/docker-compose.yml
+
+  edu-reverse-01:
+    include: ./challenges-codex/edu-reverse-01/docker-compose.yml
+
+  edu-pwn-01:
+    include: ./challenges-codex/edu-pwn-01/docker-compose.yml
+
+  edu-osint-01:
+    include: ./challenges-codex/edu-osint-01/docker-compose.yml
+
+  edu-misc-01:
+    include: ./challenges-codex/edu-misc-01/docker-compose.yml

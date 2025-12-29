@@ -10,43 +10,36 @@ services:
     include: ./challenges-codex/web-01/docker-compose.yml
     networks:
       - public
-    ports: []
 
   mix-web-02:
     include: ./challenges-codex/web-02/docker-compose.yml
     networks:
       - public
-    ports: []
 
   mix-web-03:
     include: ./challenges-codex/web-03/docker-compose.yml
     networks:
       - public
-    ports: []
 
   mix-web-04:
     include: ./challenges-codex/web-04/docker-compose.yml
     networks:
       - public
-    ports: []
 
   mix-ssh-01:
     include: ./challenges-codex/ssh-mix-01/docker-compose.yml
     networks:
       - public
-    ports: []
 
   mix-ssh-02:
     include: ./challenges-codex/ssh-mix-02/docker-compose.yml
     networks:
       - public
-    ports: []
 
   mix-ssh-03:
     include: ./challenges-codex/ssh-mix-03/docker-compose.yml
     networks:
       - public
-    ports: []
 
   mix-attach-01:
     include: ./challenges-codex/attachment-01/docker-compose.yml
@@ -58,4 +51,3 @@ services:
     include: ./challenges-codex/multi-01/docker-compose.yml
     networks:
       - public
-    ports: []

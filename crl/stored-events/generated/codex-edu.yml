@@ -1,0 +1,16 @@
+external-url: "127.0.0.1"
+blueprint: "blueprints/generated/codex-edu.yml"
+
+flag-format: "flag{%user%-%hash%}"
+
+ctfd:
+  INIT_EVENT_MODE: "users"
+  INIT_ADMIN_PASS: "password123"
+  AUTH_TYPE: "public"
+  REGISTRATION_USERNAME_ALLOWED_REGEX: "^[A-Za-z0-9]+$$"
+  REGISTRATION_USERNAME_MIN_LENGTH: "1"
+  REGISTRATION_USERNAME_MAX_LENGTH: "32"
+  REGISTRATION_USERNAME_CASE_SENSITIVE: "true"
+  CRL_ENABLE: "true"
+  HINTS_DISABLE_SORT: "true"
+  HINTS_DISABLE_CHECK: "true"
